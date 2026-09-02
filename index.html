@@ -124,6 +124,63 @@
 
 section[id]{scroll-margin-top:240px}
 .toc a{cursor:pointer;position:relative;z-index:1}
+
+/* --- Compact search/filter UX --- */
+.filter-panel{
+  transition:padding .18s ease, border-radius .18s ease, box-shadow .18s ease;
+}
+.filter-panel.compact{
+  padding:9px 10px;
+  border-radius:0 0 16px 16px;
+}
+.filter-panel.compact .searchbox{
+  margin-bottom:0;
+  padding:10px 12px;
+}
+.filter-panel.compact .filter-row{
+  display:none;
+}
+.filter-panel.compact .filter-meta{
+  margin-top:7px;
+}
+.filter-toggle{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--accent);
+  font-weight:800;
+  border-radius:999px;
+  padding:7px 11px;
+  white-space:nowrap;
+}
+.filter-panel:not(.compact) .filter-toggle{
+  display:none;
+}
+.filter-meta-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+.filter-meta-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+@media (max-width:520px){
+  .filter-panel.compact{
+    margin-left:-14px;
+    margin-right:-14px;
+  }
+  .filter-panel.compact .filter-meta{
+    gap:6px;
+  }
+  .filter-panel.compact .count{
+    font-size:.82rem;
+  }
+  .filter-panel.compact .reset{
+    font-size:.82rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -143,7 +200,7 @@ section[id]{scroll-margin-top:240px}
 <div class="filter-row"><div class="filter-label">😋 気分</div><div class="chips" data-filter-group="mood">
 <button class="chip active" data-value="all">すべて</button><button class="chip" data-value="rich">こってり</button><button class="chip" data-value="mild">まろやか</button><button class="chip" data-value="curry">カレー</button><button class="chip" data-value="tantan">ごま担々</button><button class="chip" data-value="egg">卵</button>
 </div></div>
-<div class="filter-meta"><span class="count" id="resultCount"></span><button class="reset" id="resetFilters">条件をリセット</button></div>
+<div class="filter-meta"><div class="filter-meta-left"><span class="count" id="resultCount"></span></div><div class="filter-meta-right"><button class="filter-toggle" id="filterToggle" type="button">条件を開く</button><button class="reset" id="resetFilters">条件をリセット</button></div></div>
 </section>
 <section class="card base">
 <h2>共通ベース</h2>
@@ -411,6 +468,58 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape')closeCookMode();});
       }, 40);
     });
   });
+})();
+</script><script>
+(() => {
+  const panel = document.getElementById('filters');
+  const search = document.getElementById('recipeSearch');
+  const toggle = document.getElementById('filterToggle');
+  const reset = document.getElementById('resetFilters');
+
+  if(!panel || !search) return;
+
+  const collapse = () => {
+    panel.classList.add('compact');
+  };
+
+  const expand = () => {
+    panel.classList.remove('compact');
+  };
+
+  // Typing keeps the search box visible but hides the bulky filter rows.
+  search.addEventListener('input', () => {
+    if(search.value.trim().length > 0){
+      collapse();
+    }
+  });
+
+  // Selecting any filter automatically gives the results more room.
+  document.querySelectorAll('[data-filter-group] .chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Let the existing filter handler run first.
+      setTimeout(collapse, 0);
+    });
+  });
+
+  if(toggle){
+    toggle.addEventListener('click', expand);
+  }
+
+  if(reset){
+    reset.addEventListener('click', () => {
+      expand();
+    });
+  }
+
+  // Once the user scrolls down into results, collapse the panel too.
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if(y > lastY && y > 180){
+      collapse();
+    }
+    lastY = y;
+  }, {passive:true});
 })();
 </script></body>
 </html>
