@@ -181,6 +181,79 @@ section[id]{scroll-margin-top:240px}
     font-size:.82rem;
   }
 }
+
+/* --- Search after selecting conditions --- */
+.search-actions{
+  margin-top:14px;
+}
+.search-submit{
+  width:100%;
+  border:none;
+  border-radius:14px;
+  background:var(--accent);
+  color:#fff;
+  font-size:1rem;
+  font-weight:900;
+  padding:13px 16px;
+  cursor:pointer;
+}
+.search-submit:active{transform:scale(.99)}
+
+.filter-compact-summary{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.compact-summary-text{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  gap:2px;
+}
+.compact-summary-text strong{
+  font-size:.94rem;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.compact-summary-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-shrink:0;
+}
+.filter-panel.compact{
+  padding:9px 10px;
+  border-radius:0 0 16px 16px;
+}
+.filter-panel.compact .searchbox,
+.filter-panel.compact .filter-row,
+.filter-panel.compact .search-actions{
+  display:none!important;
+}
+.filter-panel.compact .filter-compact-summary{
+  display:flex;
+}
+.filter-panel:not(.compact) .filter-compact-summary{
+  display:none;
+}
+.filter-panel:not(.compact) .filter-toggle{
+  display:inline-block;
+}
+@media (max-width:520px){
+  .filter-panel.compact{
+    margin-left:-14px;
+    margin-right:-14px;
+  }
+  .compact-summary-actions .reset{
+    font-size:.78rem;
+  }
+  .filter-toggle{
+    font-size:.82rem;
+    padding:7px 10px;
+  }
+}
 </style>
 </head>
 <body>
@@ -200,7 +273,21 @@ section[id]{scroll-margin-top:240px}
 <div class="filter-row"><div class="filter-label">😋 気分</div><div class="chips" data-filter-group="mood">
 <button class="chip active" data-value="all">すべて</button><button class="chip" data-value="rich">こってり</button><button class="chip" data-value="mild">まろやか</button><button class="chip" data-value="curry">カレー</button><button class="chip" data-value="tantan">ごま担々</button><button class="chip" data-value="egg">卵</button>
 </div></div>
-<div class="filter-meta"><div class="filter-meta-left"><span class="count" id="resultCount"></span></div><div class="filter-meta-right"><button class="filter-toggle" id="filterToggle" type="button">条件を開く</button><button class="reset" id="resetFilters">条件をリセット</button></div></div>
+
+
+<div class="search-actions">
+<button class="search-submit" id="applyFilters" type="button">🔍 この条件で検索</button>
+</div>
+<div aria-live="polite" class="filter-compact-summary" id="compactSummary">
+<div class="compact-summary-text">
+<strong id="selectedSummary">すべてのレシピ</strong>
+<span class="count" id="resultCount"></span>
+</div>
+<div class="compact-summary-actions">
+<button class="filter-toggle" id="filterToggle" type="button">条件を変更</button>
+<button class="reset" id="resetFilters" type="button">リセット</button>
+</div>
+</div>
 </section>
 <section class="card base">
 <h2>共通ベース</h2>
@@ -410,13 +497,7 @@ section[id]{scroll-margin-top:240px}
 <p>すべて<strong>2人分・パスタ200g・共通野菜ストック1袋</strong>が基準です。野菜は先にアイラップでクタクタまで加熱し、袋に出た汁もソースに使います。</p>
 <p class="note">パスタは表示時間より1分ほど短めに茹で、最後にソースと絡めるとまとまりやすいです。ソースが濃い・重いときは茹で汁を50mlずつ足して調整。</p>
 </section><section class="card" data-meat="pork" data-mood="mild tantan" data-recipe="1" data-search="🍝🥜 豚こま豆乳ごま担々パスタ 豚こま 200〜250g 担々ごま鍋の素 80ml／豆乳 200ml／にんにく 3cm／茹で汁 50〜100ml 辛ければ豆乳を追加。担々ごま鍋の素を1食80ml消費。 パスタ 共通野菜ストック" data-staple="pasta" id="pasta-tantan-soy"><h3>🍝🥜 豚こま豆乳ごま担々パスタ</h3><span class="tag">ごま担々</span><span class="tag">まろやか</span><span class="tag">大量消費</span><div class="ingredients"><strong>肉：</strong>豚こま 200〜250g<br/>パスタ 200g／共通野菜ストック 1袋／担々ごま鍋の素 80ml／豆乳 200ml／にんにく 3cm／茹で汁 50〜100ml</div><ol><li>野菜ストックをクタクタまでレンチンし、同時にパスタ200gを茹でる。</li><li>フライパンで豚こま200〜250gを炒め、火が通ったら野菜を汁ごと加える。</li><li>担々ごま鍋の素80ml・豆乳200ml・にんにく3cmを加え、弱火で温める。</li><li>茹でたパスタを加えて絡める。重ければ茹で汁を50mlずつ加える。</li></ol><p class="note">辛ければ豆乳を追加。担々ごま鍋の素を1食80ml消費。</p><button class="cook-btn" data-cook-id="pasta-tantan-soy" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="pork" data-mood="mild rich tantan" data-recipe="1" data-search="🍝🥜🧀 豚こま担々チーズパスタ 豚こま 200〜250g 担々ごま鍋の素 80ml／豆乳 150ml／ピザ用チーズ 50g／にんにく 2〜3cm／茹で汁 50ml〜  パスタ 共通野菜ストック" data-staple="pasta" id="pasta-tantan-cheese"><h3>🍝🥜🧀 豚こま担々チーズパスタ</h3><span class="tag">ごま担々</span><span class="tag">こってり</span><span class="tag">チーズ</span><div class="ingredients"><strong>肉：</strong>豚こま 200〜250g<br/>パスタ 200g／共通野菜ストック 1袋／担々ごま鍋の素 80ml／豆乳 150ml／ピザ用チーズ 50g／にんにく 2〜3cm／茹で汁 50ml〜</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>豚こまを炒めて野菜を汁ごと加える。</li><li>担々ごま鍋の素80ml・豆乳150ml・にんにくを加えて弱火で温める。</li><li>パスタを加えて絡め、チーズ50gを加えて溶かす。</li><li>濃すぎれば茹で汁を少しずつ足す。</li></ol><button class="cook-btn" data-cook-id="pasta-tantan-cheese" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="pork" data-mood="tantan" data-recipe="1" data-search="🍝🥜🧄 豚こま汁なし担々風パスタ 豚こま 250g 担々ごま鍋の素 70ml／にんにく 4〜5cm／ごま油 小さじ1／茹で汁 50ml 鍋っぽさが出にくい、濃いめの和えパスタ。 パスタ 共通野菜ストック" data-staple="pasta" id="pasta-tantan-garlic"><h3>🍝🥜🧄 豚こま汁なし担々風パスタ</h3><span class="tag">ごま担々</span><span class="tag">にんにく</span><span class="tag">汁なし</span><div class="ingredients"><strong>肉：</strong>豚こま 250g<br/>パスタ 200g／共通野菜ストック 1袋／担々ごま鍋の素 70ml／にんにく 4〜5cm／ごま油 小さじ1／茹で汁 50ml</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>豚こま250gを炒め、野菜を汁ごと加える。</li><li>担々ごま鍋の素70ml・にんにく4〜5cmを加え、汁気をしっかり飛ばす。</li><li>パスタと茹で汁50mlを加えて強めの中火で絡め、最後にごま油小さじ1。</li></ol><p class="note">鍋っぽさが出にくい、濃いめの和えパスタ。</p><button class="cook-btn" data-cook-id="pasta-tantan-garlic" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="chicken" data-mood="mild rich" data-recipe="1" data-search="🍝🥛 鶏ももの豆乳クリームパスタ 鶏もも 250g 豆乳 250ml／コンソメ 小さじ2／味噌 小さじ2／バター 10g／片栗粉 小さじ1＋水 小さじ1／茹で汁 50ml〜 豆乳を入れてからは強く沸騰させない。 パスタ 共通野菜ストック" data-staple="pasta" id="pasta-chicken-cream"><h3>🍝🥛 鶏ももの豆乳クリームパスタ</h3><span class="tag">鶏肉おすすめ</span><span class="tag">まろやか</span><span class="tag">クリーム</span><div class="ingredients"><strong>肉：</strong>鶏もも 250g<br/>パスタ 200g／共通野菜ストック 1袋／豆乳 250ml／コンソメ 小さじ2／味噌 小さじ2／バター 10g／片栗粉 小さじ1＋水 小さじ1／茹で汁 50ml〜</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>鶏もも250gを一口大にして炒め、中までしっかり火を通す。</li><li>野菜を汁ごと加え、コンソメ小さじ2・味噌小さじ2を混ぜる。</li><li>豆乳250ml・バター10gを加え、弱火で温める。</li><li>必要なら水溶き片栗粉で少しとろみをつけ、パスタを絡める。</li></ol><p class="note">豆乳を入れてからは強く沸騰させない。</p><button class="cook-btn" data-cook-id="pasta-chicken-cream" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="pork" data-mood="mild rich" data-recipe="1" data-search="🍝🧀 豚こま味噌チーズクリームパスタ 豚こま 200〜250g 豆乳 200ml／味噌 大さじ1.5／みりん 大さじ1／にんにく 2cm／チーズ 50g／茹で汁 50ml〜  パスタ 共通野菜ストック" data-staple="pasta" id="pasta-miso-cheese"><h3>🍝🧀 豚こま味噌チーズクリームパスタ</h3><span class="tag">こってり</span><span class="tag">味噌</span><span class="tag">チーズ</span><div class="ingredients"><strong>肉：</strong>豚こま 200〜250g<br/>パスタ 200g／共通野菜ストック 1袋／豆乳 200ml／味噌 大さじ1.5／みりん 大さじ1／にんにく 2cm／チーズ 50g／茹で汁 50ml〜</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>豚こまを炒め、野菜を汁ごと加える。</li><li>味噌大さじ1.5・みりん大さじ1・にんにく2cmを混ぜる。</li><li>豆乳200mlを加えて弱火で温め、チーズ50gを溶かす。</li><li>パスタを加えて絡め、重ければ茹で汁で調整する。</li></ol><button class="cook-btn" data-cook-id="pasta-miso-cheese" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="pork" data-mood="rich" data-recipe="1" data-search="🍝🧄 豚こまにんにくバター醤油パスタ 豚こま 250g 醤油 大さじ2／みりん 大さじ1／にんにく 4〜5cm／バター 15g／茹で汁 80〜100ml 汁気を飛ばしすぎるとパサつくので、茹で汁は少し残す。 パスタ 共通野菜ストック" data-staple="pasta" id="pasta-garlic-butter"><h3>🍝🧄 豚こまにんにくバター醤油パスタ</h3><span class="tag">にんにく</span><span class="tag">バター</span><span class="tag">和風</span><div class="ingredients"><strong>肉：</strong>豚こま 250g<br/>パスタ 200g／共通野菜ストック 1袋／醤油 大さじ2／みりん 大さじ1／にんにく 4〜5cm／バター 15g／茹で汁 80〜100ml</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>豚こま250gを炒め、野菜を汁ごと加える。</li><li>醤油大さじ2・みりん大さじ1・にんにく4〜5cmを加えて1〜2分炒める。</li><li>パスタと茹で汁80〜100mlを加えてよく絡める。</li><li>火を止めてバター15gを溶かす。</li></ol><p class="note">汁気を飛ばしすぎるとパサつくので、茹で汁は少し残す。</p><button class="cook-btn" data-cook-id="pasta-garlic-butter" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="chicken" data-mood="mild rich" data-recipe="1" data-search="🍝🥛 鶏ももの白だし豆乳クリームパスタ 鶏もも 250g 豆乳 250ml／白だし 大さじ2／醤油 小さじ1／バター 10g／茹で汁 50ml〜  パスタ 共通野菜ストック" data-staple="pasta" id="pasta-shirodashi"><h3>🍝🥛 鶏ももの白だし豆乳クリームパスタ</h3><span class="tag">鶏肉おすすめ</span><span class="tag">まろやか</span><span class="tag">和風クリーム</span><div class="ingredients"><strong>肉：</strong>鶏もも 250g<br/>パスタ 200g／共通野菜ストック 1袋／豆乳 250ml／白だし 大さじ2／醤油 小さじ1／バター 10g／茹で汁 50ml〜</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>鶏もも250gを一口大にして炒め、中まで火を通す。</li><li>野菜を汁ごと加え、白だし大さじ2・醤油小さじ1を混ぜる。</li><li>豆乳250mlを加えて弱火で温め、最後にバター10g。</li><li>パスタを絡め、必要なら茹で汁で濃さを調整する。</li></ol><button class="cook-btn" data-cook-id="pasta-shirodashi" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="pork" data-mood="curry mild" data-recipe="1" data-search="🍝🍛 豚こま豆乳カレーパスタ 豚こま 200〜250g カレールー 2かけ／豆乳 200ml／水 100ml／にんにく 2cm／茹で汁 50ml〜  パスタ 共通野菜ストック" data-staple="pasta" id="pasta-curry-soy"><h3>🍝🍛 豚こま豆乳カレーパスタ</h3><span class="tag">カレー</span><span class="tag">まろやか</span><div class="ingredients"><strong>肉：</strong>豚こま 200〜250g<br/>パスタ 200g／共通野菜ストック 1袋／カレールー 2かけ／豆乳 200ml／水 100ml／にんにく 2cm／茹で汁 50ml〜</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>豚こまを炒め、野菜を汁ごと加える。</li><li>水100mlとカレールー2かけを加えて溶かす。</li><li>豆乳200ml・にんにく2cmを加えて弱火で温める。</li><li>パスタを絡め、重ければ茹で汁で調整する。</li></ol><button class="cook-btn" data-cook-id="pasta-curry-soy" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="chicken" data-mood="curry mild rich" data-recipe="1" data-search="🍝🍛🧀 鶏ももカレーチーズパスタ 鶏もも 250g カレールー 2かけ／水 120ml／豆乳 150ml／チーズ 50g／茹で汁 50ml〜  パスタ 共通野菜ストック" data-staple="pasta" id="pasta-curry-cheese"><h3>🍝🍛🧀 鶏ももカレーチーズパスタ</h3><span class="tag">鶏肉おすすめ</span><span class="tag">カレー</span><span class="tag">こってり</span><div class="ingredients"><strong>肉：</strong>鶏もも 250g<br/>パスタ 200g／共通野菜ストック 1袋／カレールー 2かけ／水 120ml／豆乳 150ml／チーズ 50g／茹で汁 50ml〜</div><ol><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>鶏もも250gを炒め、中まで火を通してから野菜を汁ごと加える。</li><li>水120mlとカレールー2かけを加えて溶かす。</li><li>豆乳150mlを加えて弱火で温め、チーズ50gを溶かす。</li><li>パスタを絡め、濃さを茹で汁で調整する。</li></ol><button class="cook-btn" data-cook-id="pasta-curry-cheese" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section><section class="card" data-meat="pork" data-mood="egg mild rich" data-recipe="1" data-search="🍝🥚 豚こま豆乳カルボナーラ風 豚こま 200g 卵 2個／豆乳 150ml／ピザ用チーズ 50g／コンソメ 小さじ1.5／にんにく 2cm／黒こしょう お好み／茹で汁 50ml 卵液を入れてから強火にすると炒り卵になりやすいので注意。 パスタ 共通野菜ストック" data-staple="pasta" id="pasta-carbonara"><h3>🍝🥚 豚こま豆乳カルボナーラ風</h3><span class="tag">卵2個</span><span class="tag">こってり</span><span class="tag">クリーミー</span><div class="ingredients"><strong>肉：</strong>豚こま 200g<br/>パスタ 200g／共通野菜ストック 1袋／卵 2個／豆乳 150ml／ピザ用チーズ 50g／コンソメ 小さじ1.5／にんにく 2cm／黒こしょう お好み／茹で汁 50ml</div><ol><li>ボウルで卵2個・豆乳150ml・チーズ50g・コンソメ小さじ1.5を混ぜておく。</li><li>野菜をレンチンし、パスタ200gを茹でる。</li><li>豚こま200gを炒め、野菜を汁ごと加えてにんにく2cmを混ぜる。</li><li>パスタと茹で汁50mlを加えて火を止める。</li><li>卵液を加え、余熱で素早く混ぜる。ゆるければごく弱火で少しだけ温める。</li></ol><p class="note">卵液を入れてから強火にすると炒り卵になりやすいので注意。</p><button class="cook-btn" data-cook-id="pasta-carbonara" type="button">🍳 調理モード</button><a class="back" href="#top">↑ 一覧へ戻る</a></section></div>
-<script>
-(()=>{const s={meat:'all',staple:'all',mood:'all',q:''};const rs=[...document.querySelectorAll('[data-recipe="1"]')];const c=document.getElementById('resultCount');
-function f(){let n=0;rs.forEach(x=>{const ok=(!s.q||x.dataset.search.includes(s.q))&&(s.meat==='all'||x.dataset.meat===s.meat)&&(s.staple==='all'||x.dataset.staple===s.staple)&&(s.mood==='all'||(x.dataset.mood||'').split(' ').includes(s.mood));x.classList.toggle('recipe-hidden',!ok);if(ok)n++});c.textContent=`${n}件のレシピ`;}
-document.querySelectorAll('[data-filter-group]').forEach(g=>{const k=g.dataset.filterGroup;g.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{g.querySelectorAll('.chip').forEach(z=>z.classList.remove('active'));b.classList.add('active');s[k]=b.dataset.value;f()})});
-const q=document.getElementById('recipeSearch');q.oninput=e=>{s.q=e.target.value.trim().toLowerCase();f()};
-document.getElementById('resetFilters').onclick=()=>{s.meat=s.staple=s.mood='all';s.q='';q.value='';document.querySelectorAll('[data-filter-group]').forEach(g=>g.querySelectorAll('.chip').forEach(b=>b.classList.toggle('active',b.dataset.value==='all')));f()};f();})();
-</script>
+
 <div aria-hidden="true" class="cook-overlay" id="cookOverlay">
 <div class="cook-shell">
 <div class="cook-topbar">
@@ -472,54 +553,132 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape')closeCookMode();});
 </script><script>
 (() => {
   const panel = document.getElementById('filters');
-  const search = document.getElementById('recipeSearch');
-  const toggle = document.getElementById('filterToggle');
-  const reset = document.getElementById('resetFilters');
+  const recipes = [...document.querySelectorAll('[data-recipe="1"]')];
+  const searchInput = document.getElementById('recipeSearch');
+  const applyBtn = document.getElementById('applyFilters');
+  const toggleBtn = document.getElementById('filterToggle');
+  const resetBtn = document.getElementById('resetFilters');
+  const countEl = document.getElementById('resultCount');
+  const summaryEl = document.getElementById('selectedSummary');
 
-  if(!panel || !search) return;
+  if(!panel || !applyBtn) return;
 
-  const collapse = () => {
+  const draft = { meat:'all', staple:'all', mood:'all' };
+  const applied = { meat:'all', staple:'all', mood:'all', q:'' };
+
+  const labels = {
+    meat:{all:'肉すべて', pork:'豚', chicken:'鶏', other:'その他'},
+    staple:{all:'主食すべて', rice:'ご飯・おかず', pasta:'パスタ', udon:'うどん', none:'おかず'},
+    mood:{all:'気分すべて', rich:'こってり', mild:'まろやか', curry:'カレー', tantan:'ごま担々', egg:'卵'}
+  };
+
+  function render(){
+    let visible = 0;
+    recipes.forEach(card => {
+      const text = (card.dataset.search || card.textContent || '').toLowerCase();
+      const moods = (card.dataset.mood || '').split(' ');
+      const ok =
+        (!applied.q || text.includes(applied.q)) &&
+        (applied.meat === 'all' || card.dataset.meat === applied.meat) &&
+        (applied.staple === 'all' || card.dataset.staple === applied.staple) &&
+        (applied.mood === 'all' || moods.includes(applied.mood));
+
+      card.classList.toggle('recipe-hidden', !ok);
+      if(ok) visible++;
+    });
+
+    if(countEl) countEl.textContent = `${visible}件`;
+
+    const parts = [];
+    if(applied.meat !== 'all') parts.push(labels.meat[applied.meat]);
+    if(applied.staple !== 'all') parts.push(labels.staple[applied.staple]);
+    if(applied.mood !== 'all') parts.push(labels.mood[applied.mood]);
+    if(applied.q) parts.push(`「${applied.q}」`);
+    if(summaryEl) summaryEl.textContent = parts.length ? parts.join('・') : 'すべてのレシピ';
+
+    document.querySelectorAll('.section-title').forEach(h => {
+      let el = h.nextElementSibling;
+      let anyVisible = false;
+      while(el && !(el.matches && el.matches('.section-title'))){
+        if(el.matches && el.matches('[data-recipe="1"]') && !el.classList.contains('recipe-hidden')){
+          anyVisible = true;
+          break;
+        }
+        el = el.nextElementSibling;
+      }
+      h.classList.toggle('category-hidden', !anyVisible);
+    });
+  }
+
+  // Select chips only; do NOT search yet.
+  document.querySelectorAll('[data-filter-group]').forEach(group => {
+    const key = group.dataset.filterGroup;
+    group.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        draft[key] = btn.dataset.value;
+      });
+    });
+  });
+
+  function applySearch(){
+    applied.meat = draft.meat;
+    applied.staple = draft.staple;
+    applied.mood = draft.mood;
+    applied.q = (searchInput?.value || '').trim().toLowerCase();
+
+    render();
     panel.classList.add('compact');
-  };
 
-  const expand = () => {
-    panel.classList.remove('compact');
-  };
-
-  // Typing keeps the search box visible but hides the bulky filter rows.
-  search.addEventListener('input', () => {
-    if(search.value.trim().length > 0){
-      collapse();
+    // Move the first result just under the compact search bar.
+    const firstVisible = recipes.find(r => !r.classList.contains('recipe-hidden'));
+    if(firstVisible){
+      setTimeout(() => {
+        firstVisible.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 60);
     }
-  });
-
-  // Selecting any filter automatically gives the results more room.
-  document.querySelectorAll('[data-filter-group] .chip').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Let the existing filter handler run first.
-      setTimeout(collapse, 0);
-    });
-  });
-
-  if(toggle){
-    toggle.addEventListener('click', expand);
   }
 
-  if(reset){
-    reset.addEventListener('click', () => {
-      expand();
+  applyBtn.addEventListener('click', applySearch);
+
+  // Enter in text search behaves like pressing the Search button.
+  if(searchInput){
+    searchInput.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        applySearch();
+      }
     });
   }
 
-  // Once the user scrolls down into results, collapse the panel too.
-  let lastY = window.scrollY;
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    if(y > lastY && y > 180){
-      collapse();
-    }
-    lastY = y;
-  }, {passive:true});
+  if(toggleBtn){
+    toggleBtn.addEventListener('click', () => {
+      panel.classList.remove('compact');
+      panel.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
+  if(resetBtn){
+    resetBtn.addEventListener('click', () => {
+      draft.meat = draft.staple = draft.mood = 'all';
+      applied.meat = applied.staple = applied.mood = 'all';
+      applied.q = '';
+      if(searchInput) searchInput.value = '';
+
+      document.querySelectorAll('[data-filter-group]').forEach(group => {
+        group.querySelectorAll('.chip').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.value === 'all');
+        });
+      });
+
+      render();
+      panel.classList.remove('compact');
+      panel.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
+  render();
 })();
 </script></body>
 </html>
